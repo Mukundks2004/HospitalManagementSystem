@@ -9,12 +9,22 @@
 
 	public class Application
 	{
+		static Patient testPatient;
+		static Doctor testDoctor;
+
 		User? CurrentUser { get; set; }
 		AppState State { get; set; } = AppState.Login;
 		Utilities Utilities { get; set; } = new();
 
+		public void RemoveThisSetup()
+		{
+			//testPatient = new Patient(Utilities.CurrentId, "b", "g", "pp", new Address(1, "a", "b", "c", "d", "e"), "@", "0123");
+			testDoctor = new Doctor(Utilities.CurrentId, "skjdjksf", "sfdlkklds", "pp", new Address(2, "b", "c", "d", "eoooo", "ff"), "@", "0123");
+		}
 		public void Run()
 		{
+			RemoveThisSetup();
+
 			while (State != AppState.Exit)
 			{
 				switch (State)
@@ -81,7 +91,7 @@
 			Console.WriteLine("Registering a new patient with the DOTNET Hospital Management System");
 		}
 
-		//might need to make the below static later
+		//might need to make the below static later -> extract to repo class?
 		User? GetUserFromDatabase(string id, string password)
 		{
 			if (!Constants.TempDetails.TryGetValue(id, out string? value))
@@ -93,10 +103,14 @@
 				return null;
 			}
 			//return new Admin("a", "b", "g", "pp");
-			var x = new Patient(Utilities.CurrentId.ToString("0000"), "b", "g", "pp", new Address("a", "b", "c", "d", "e"), "@", "0123");
-			var y = new Doctor(Utilities.CurrentId.ToString("0000"), "skjdjksf", "sfdlkklds", "pp", new Address("a", "b", "c", "d", "eoooo"), "@", "0123");
-			x.Doctor = y;
-			return x;
+			testPatient.Doctor = testDoctor;
+			return testDoctor;
+		}
+
+		//move this to repo class
+		public static IEnumerable<Appointment> GetAllAppointmentsForPatientWithId(int id)
+		{
+			return new List<Appointment>() { new Appointment("1", testDoctor, testPatient, "blah") };
 		}
 	}
 }

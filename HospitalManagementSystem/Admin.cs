@@ -1,7 +1,7 @@
 ﻿namespace HospitalManagementSystem
 {
 	public class Admin(
-		string id,
+		int id,
 		string password,
 		string firstname,
 		string lastname) : User(id, password, firstname, lastname, null, null, null)
@@ -10,7 +10,7 @@
 		{
 
 			Utilities.PrintMessageInBox("Administrator Menu");
-			Console.WriteLine(@$"Welcome to DOTNET Hospital Management System {Firstname} {Lastname}
+			Console.WriteLine(@$"Welcome to DOTNET Hospital Management System {GetFullName()}
 
 Please choose an option:
 1. List all doctors

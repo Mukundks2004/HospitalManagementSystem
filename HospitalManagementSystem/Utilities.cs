@@ -3,7 +3,7 @@
 	public class Utilities
 	{
 		//Might make a whole class of these, use for doctor, patient, apppointment, etc.
-		int _currentId = 1;
+		int _currentId = 1000;
 
 		public int CurrentId
 		{
