@@ -22,11 +22,19 @@ namespace HospitalManagementSystem
 			Database.EnsureCreated();
 		}
 
+		/// <summary>
+		/// Sets connection string for DB
+		/// </summary>
+		/// <param name="optionsBuilder"></param>
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			optionsBuilder.UseSqlite($"Data Source={DbPath}");
 		}
 
+		/// <summary>
+		/// Defines the foreign key relationships between all tables in the DB
+		/// </summary>
+		/// <param name="modelBuilder"></param>
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<User>()

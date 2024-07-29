@@ -30,6 +30,11 @@
 			Console.WriteLine($"{Constants.BottomLeft}{line}{Constants.BottomRight}");
 		}
 
+		/// <summary>
+		/// Prompts the user with the provided prompt, then censors their password with '*'
+		/// </summary>
+		/// <param name="prompt"></param>
+		/// <returns></returns>
 		public static string ReadPassword(string prompt = "Password: ")
 		{
 			var pass = string.Empty;
@@ -55,6 +60,11 @@
 			return pass;
 		}
 
+		/// <summary>
+		/// Reads input from the user and returns an empty string if the user ctrl-Zs
+		/// </summary>
+		/// <param name="prompt"></param>
+		/// <returns></returns>
 		public static string ReadLine(string prompt = "")
 		{
 			Console.Write(prompt);

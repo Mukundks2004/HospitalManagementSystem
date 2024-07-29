@@ -10,6 +10,7 @@
 	public class Application
 	{
 		readonly HospitalService _hospitalService;
+
 		string _feedback = string.Empty;
 
 		User? CurrentUser { get; set; }
@@ -23,6 +24,9 @@
 			_hospitalService = hospitalService;
 		}
 
+		/// <summary>
+		/// Runs the login process until the application state is set to exit
+		/// </summary>
 		public void Run()
 		{
 			_hospitalService.AddSeedData();

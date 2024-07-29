@@ -15,6 +15,9 @@
 			_addressRepository = addressRepository;
 		}
 
+		/// <summary>
+		/// Populates DB with doctors, patients, admins, addresses and appointments
+		/// </summary>
 		public void AddSeedData()
 		{
 			var sampleAddresses = SeedData.GetSampleAddresses();
@@ -35,6 +38,10 @@
 			_appointmentRepository.SaveChanges();
 		}
 
+		/// <summary>
+		/// Returns all users including addresses for hospital users
+		/// </summary>
+		/// <returns></returns>
 		public IEnumerable<User> GetAllUsers()
 		{
 			var hospitalUsers = _userRepository.GetAllHospitalUsers().ToList<User>();
@@ -42,6 +49,11 @@
 			return hospitalUsers.Concat(admin);
 		}
 
+		/// <summary>
+		/// Displays the appropriate menu options depending on the user type
+		/// </summary>
+		/// <param name="user"></param>
+		/// <returns></returns>
 		public AppState DisplayMenu(User user)
 		{
 			Console.Clear();

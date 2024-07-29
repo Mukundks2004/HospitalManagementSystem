@@ -4,6 +4,11 @@ namespace HospitalManagementSystem
 {
 	public class Program
 	{
+		/// <summary>
+		/// Entry point for program- sets up dependency injection for all repositories and services and calls application
+		/// </summary>
+		/// <param name="args"></param>
+		/// <exception cref="ArgumentNullException"></exception>
 		public static void Main(string[] args)
 		{
 			ServiceProvider serviceProvider = new ServiceCollection()

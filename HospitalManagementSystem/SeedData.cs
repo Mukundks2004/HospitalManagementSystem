@@ -4,6 +4,11 @@
 	{
 		static readonly Random rnd = new();
 
+		/// <summary>
+		/// Returns some sample doctors
+		/// </summary>
+		/// <param name="addressIds"></param>
+		/// <returns></returns>
 		public static Doctor[] GetSampleDoctors(int?[] addressIds)
 		{
 			return
@@ -111,6 +116,11 @@
 			];
 		}
 
+		/// <summary>
+		/// Returns sample patients for seeding the database
+		/// </summary>
+		/// <param name="addressIds"></param>
+		/// <returns></returns>
 		public static Patient[] GetSamplePatients(int?[] addressIds)
 		{
 			return
@@ -218,6 +228,10 @@
 			];
 		}
 
+		/// <summary>
+		/// Returns sample admin accounts
+		/// </summary>
+		/// <returns></returns>
 		public static Admin[] GetSampleAdmin()
 		{
 			return
@@ -295,6 +309,12 @@
 			];
 		}
 
+		/// <summary>
+		/// Returns sample appointments, requires patient and doctor ids to generate these
+		/// </summary>
+		/// <param name="patientIds"></param>
+		/// <param name="doctorIds"></param>
+		/// <returns></returns>
 		public static Appointment[] GetSampleAppointments(int?[] patientIds, int?[] doctorIds)
 		{
 			var appointments = new Appointment[10];
@@ -326,6 +346,10 @@
 			return appointments;
 		}
 
+		/// <summary>
+		/// Returns sample addresses
+		/// </summary>
+		/// <returns></returns>
 
 		public static Address[] GetSampleAddresses() =>
 			[
