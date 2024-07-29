@@ -279,6 +279,8 @@ Please choose an option:
 			var appointmentDescription = Utilities.ReadLine("Description of the appointment: ");
 			Console.WriteLine("The appointment has been booked successfully");
 
+			SendMail(patient.Email);
+
 			var newAppointment = new Appointment() { DoctorId = chosenDoctor.Id, PatientId = patient.Id, Description = appointmentDescription };
 			_appointmentRepository.Add(newAppointment);
 			_appointmentRepository.SaveChanges();
@@ -507,6 +509,11 @@ Please choose an option:
 			_userRepository.SaveChanges();
 
 			Console.WriteLine($"{firstname} {lastname} added to the system!");
+		}
+
+		void SendMail(string email)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
