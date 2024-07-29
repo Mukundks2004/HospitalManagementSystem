@@ -2,47 +2,7 @@
 {
 	public static class SeedData
 	{
-		/*public static void Initialize(HospitalManagementSystemContext context)
-		{
-			/*var mksAddress = new Address() { Id = 1, Postcode = "0000", StreetName = "Fawcett", StreetNumber = "7", State = "NSW", Suburb = "Glenfield"};
-			context.Addresses.Add(mksAddress);
-			context.SaveChanges();
-
-			//var mksPatient = new Patient() { Address = mksAddress, AddressId = 1, Firstname = "M", Lastname = "S", Email = "mk@", Phone = "040404", Id = 1, Password = "mks"};
-			//var mksPatient = new Patient() { Address = mksAddress, Firstname = "M", Lastname = "S", Email = "mk@", Phone = "040404", Id = 1, Password = "mks"};
-			var mksPatient = new Patient() { AddressId = 1, Firstname = "M", Lastname = "S", Email = "mk@", Phone = "040404", Id = 1, Password = "mks"};
-			context.Users.Add(mksPatient);
-			context.SaveChanges();
-
-			var sampleAddresses = GetSampleAddresses();
-			context.Addresses.AddRange(sampleAddresses);
-			context.SaveChanges();
-
-			var addressIds = context.Addresses.Select(a => a.Id).ToArray();
-
-			var sampleDoctors = GetSampleDoctors(addressIds);
-			context.Users.AddRange(sampleDoctors);
-			context.SaveChanges();
-
-			var samplePatients = GetSamplePatients(addressIds);
-			context.Users.AddRange(samplePatients);
-			context.SaveChanges();
-
-			var sampleAdmins = GetSampleAdmins();
-			context.Users.AddRange(sampleAdmins);
-			context.SaveChanges();
-
-			var patientIds = context.Users.OfType<Patient>().Select(a => a.Id).ToArray();
-			var doctorIds = context.Users.OfType<Doctor>().Select(a => a.Id).ToArray();
-			context.Appointments.AddRange(GetSampleAppointments(patientIds, doctorIds));
-			context.SaveChanges();
-
-			//var context2 = new HospitalManagementSystemContext();
-			//var y = context2.Users.OfType<Patient>().Include(u => u.Address).FirstOrDefault();
-			//var z = context.Users.OfType<Patient>().Include(u => u.Address).FirstOrDefault();
-		}*/
-
-		static Random rnd = new Random();
+		static readonly Random rnd = new();
 
 		public static Doctor[] GetSampleDoctors(int?[] addressIds)
 		{
@@ -172,7 +132,7 @@
 					Firstname = "Aiden",
 					Lastname = "Gardner",
 					AddressId = addressIds[rnd.Next(addressIds.Length)],
-					Email = "rock_climber@gmail.com",
+					Email = "climber@gmail.com",
 					Phone = "0400000011"
 				},
 				new Patient
@@ -192,7 +152,7 @@
 					Firstname = "Josh",
 					Lastname = "Roy",
 					AddressId = addressIds[rnd.Next(addressIds.Length)],
-					Email = "ultramarathon@gmail.com",
+					Email = "fastguy@gmail.com",
 					Phone = "0400000013"
 				},
 				new Patient
@@ -258,7 +218,7 @@
 			];
 		}
 
-		public static Admin[] GetSampleAdmins()
+		public static Admin[] GetSampleAdmin()
 		{
 			return
 			[

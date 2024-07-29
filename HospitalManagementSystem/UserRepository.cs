@@ -8,9 +8,9 @@ namespace HospitalManagementSystem
 		{
 		}
 
-		public IEnumerable<HospitalUser> GetAllHospitalUsers()
+		public Doctor? GetDoctorById(int id)
 		{
-			return dbContext.Users.OfType<HospitalUser>().Include(u => u.Address);
+			return dbContext.Users.OfType<Doctor>().Where(u => u.Id == id).Include(u => u.Address).FirstOrDefault();
 		}
 
 		public Patient? GetPatientById(int id)
@@ -21,6 +21,21 @@ namespace HospitalManagementSystem
 		public IEnumerable<Doctor> GetAllDoctors()
 		{
 			return dbContext.Users.OfType<Doctor>().Include(u => u.Address);
+		}
+
+		public IEnumerable<Patient> GetAllPatients()
+		{
+			return dbContext.Users.OfType<Patient>().Include(u => u.Address);
+		}
+
+		public IEnumerable<Admin> GetAllAdmin()
+		{
+			return dbContext.Users.OfType<Admin>();
+		}
+
+		public IEnumerable<HospitalUser> GetAllHospitalUsers()
+		{
+			return dbContext.Users.OfType<HospitalUser>().Include(u => u.Address);
 		}
 	}
 }

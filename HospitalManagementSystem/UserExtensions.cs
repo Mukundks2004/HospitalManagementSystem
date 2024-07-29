@@ -86,10 +86,20 @@
 			Console.WriteLine($"{new string(Constants.HorizontalLine, 6)}{Constants.Center}{new string(Constants.HorizontalLine, 20)}{Constants.Center}{new string(Constants.HorizontalLine, 20)}{Constants.Center}{new string(Constants.HorizontalLine, 20)}{Constants.Center}{new string(Constants.HorizontalLine, 12)}{Constants.Center}{new string(Constants.HorizontalLine, 35)}");
 		}
 
-		static void PrintDoctorDetailsHeader()
+		public static void PrintDoctorDetailsHeader()
 		{
 			Console.WriteLine($"ID{new string(' ', 4)}{Constants.VerticalLine} Name{new string(' ', 15)}{Constants.VerticalLine} Email Address{new string(' ', 6)}{Constants.VerticalLine} Phone{new string(' ', 6)}{Constants.VerticalLine} Address");
 			Console.WriteLine($"{new string(Constants.HorizontalLine, 6)}{Constants.Center}{new string(Constants.HorizontalLine, 20)}{Constants.Center}{new string(Constants.HorizontalLine, 20)}{Constants.Center}{new string(Constants.HorizontalLine, 12)}{Constants.Center}{new string(Constants.HorizontalLine, 35)}");
+		}
+
+		public static string GetString(this HospitalUser hospitalUser)
+		{
+			return hospitalUser switch
+			{
+				Doctor doctor => doctor.GetString(),
+				Patient patient => patient.GetString(),
+				_ => string.Empty
+			};
 		}
 
 		public static string GetString(this Patient patient)

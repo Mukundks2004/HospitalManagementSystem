@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace HospitalManagementSystem
+﻿namespace HospitalManagementSystem
 {
 	public class HospitalService
 	{
@@ -29,7 +27,7 @@ namespace HospitalManagementSystem
 			var sampleDoctors = SeedData.GetSampleDoctors(addressIds);
 			_userRepository.AddRange(sampleDoctors);
 
-			_userRepository.AddRange(SeedData.GetSampleAdmins());
+			_userRepository.AddRange(SeedData.GetSampleAdmin());
 			_appointmentRepository.AddRange(SeedData.GetSampleAppointments(samplePatients.Select(a => a.Id).ToArray(), sampleDoctors.Select(a => a.Id).ToArray()));
 
 			_userRepository.SaveChanges();
@@ -39,7 +37,9 @@ namespace HospitalManagementSystem
 
 		public IEnumerable<User> GetAllUsers()
 		{
-			return _userRepository.GetAll();
+			var hospitalUsers = _userRepository.GetAllHospitalUsers().ToList<User>();
+			var admin = _userRepository.GetAllAdmin().ToList<User>();
+			return hospitalUsers.Concat(admin);
 		}
 
 		public AppState DisplayMenu(User user)
@@ -69,7 +69,7 @@ namespace HospitalManagementSystem
 			return result;
 		}
 
-		static AppState DisplayAdminMenu(Admin admin)
+		AppState DisplayAdminMenu(Admin admin)
 		{
 			Utilities.PrintMessageInBox("Administrator Menu");
 			Console.WriteLine(@$"Welcome to DOTNET Hospital Management System {admin.GetFullName()}
@@ -83,7 +83,43 @@ Please choose an option:
 6. Add patient
 7. Logout
 8. Exit");
-			return AppState.Exit;
+			var choice = Console.ReadKey().Key;
+			switch (choice)
+			{
+				case ConsoleKey.D1:
+					ListAllDoctors();
+					_ = Utilities.ReadLine("\nPress Enter to return to menu...");
+					break;
+				case ConsoleKey.D2:
+					CheckParticularDoctor();
+					_ = Utilities.ReadLine("\nPress Enter to return to menu...");
+					break;
+				case ConsoleKey.D3:
+					ListAllPatients();
+					_ = Utilities.ReadLine("\nPress Enter to return to menu...");
+					break;
+				case ConsoleKey.D4:
+					CheckParticularPatient();
+					_ = Utilities.ReadLine("\nPress Enter to return to menu...");
+					break;
+				case ConsoleKey.D5:
+					AddDoctor();
+					_ = Utilities.ReadLine("\nPress Enter to return to menu...");
+					break;
+				case ConsoleKey.D6:
+					AddPatient();
+					_ = Utilities.ReadLine("\nPress Enter to return to menu...");
+					break;
+				case ConsoleKey.D7:
+					return AppState.Login;
+				case ConsoleKey.D8:
+					return AppState.Exit;
+				default:
+					_feedback = "Sorry that's an invalid choice!";
+					break;
+			}
+
+			return AppState.Menu;
 		}
 
 		AppState DisplayPatientMenu(Patient patient)
@@ -164,6 +200,7 @@ Please choose an option:
 					_ = Utilities.ReadLine("\nPress Enter to return to menu...");
 					break;
 				case ConsoleKey.D5:
+					AppointmentsWith(doctor);
 					_ = Utilities.ReadLine("\nPress Enter to return to menu...");
 					break;
 				case ConsoleKey.D6:
@@ -262,10 +299,202 @@ Please choose an option:
 					continue;
 				}
 
+				Console.WriteLine();
 				UserExtensions.PrintPatientDetailsHeader();
 				Console.WriteLine(patient.GetString());
 				break;
 			}
+		}
+
+		void CheckParticularDoctor()
+		{
+			while (true)
+			{
+				Console.Clear();
+				if (_feedback != string.Empty)
+				{
+					Console.WriteLine(_feedback);
+					Console.WriteLine();
+					_feedback = string.Empty;
+				}
+
+				Utilities.PrintMessageInBox("Doctor Details");
+				var doctorId = Utilities.ReadLine("\nPlease enter the ID of the doctor whose details you are checking.\n");
+				if (!int.TryParse(doctorId, out var doctorNumber))
+				{
+					_feedback = "Bad ID! Try again.";
+					continue;
+				}
+
+				var doctor = _userRepository.GetDoctorById(doctorNumber);
+				if (doctor is null)
+				{
+					_feedback = "Bad ID! Try again.";
+					continue;
+				}
+
+				Console.WriteLine($"\nDetails for {doctor.GetFullName()}\n");
+				UserExtensions.PrintDoctorDetailsHeader();
+				Console.WriteLine(doctor.GetString());
+				break;
+			}
+		}
+
+		void AppointmentsWith(Doctor doctor)
+		{
+			while (true)
+			{
+				Console.Clear();
+				if (_feedback != string.Empty)
+				{
+					Console.WriteLine(_feedback);
+					Console.WriteLine();
+					_feedback = string.Empty;
+				}
+
+				Utilities.PrintMessageInBox("Appointments With");
+				var patientId = Utilities.ReadLine("\nEnter the ID of the patient you would like to view appointments for: ");
+				if (!int.TryParse(patientId, out var patientNumber))
+				{
+					_feedback = "Bad ID! Try again.";
+					continue;
+				}
+
+				var patient = _userRepository.GetPatientById(patientNumber);
+				if (patient is null)
+				{
+					_feedback = "Bad ID! Try again.";
+					continue;
+				}
+
+				Console.WriteLine();
+				AppointmentExtensions.PrintDetailsHeader();
+				var appointments = _appointmentRepository.Find(a => a.DoctorId == doctor.Id && a.PatientId == patient.Id);
+				foreach (var appointment in appointments)
+				{
+					Console.WriteLine(appointment.GetString());
+				}
+
+				break;
+			}
+		}
+
+		void ListAllDoctors()
+		{
+			Console.Clear();
+			Utilities.PrintMessageInBox("All Doctors");
+			Console.WriteLine("\nAll doctors registered to the DOTNET Hospital Management System\n");
+			UserExtensions.PrintDoctorDetailsHeader();
+			foreach (var doctor in _userRepository.GetAllDoctors())
+			{
+				Console.WriteLine(doctor.GetString());
+			}
+		}
+
+		void ListAllPatients()
+		{
+			Console.Clear();
+			Utilities.PrintMessageInBox("All Patients");
+			Console.WriteLine("\nAll patients registered to the DOTNET Hospital Management System\n");
+			UserExtensions.PrintDoctorDetailsHeader();
+			foreach (var doctor in _userRepository.GetAllPatients())
+			{
+				Console.WriteLine(doctor.GetString());
+			}
+		}
+
+		void AddDoctor()
+		{
+			Console.Clear();
+			Utilities.PrintMessageInBox("Add Doctor");
+			Console.WriteLine("Registering a new doctor with the DOTNET Hospital Management System");
+
+			var firstname = Utilities.ReadLine("First Name: ");
+			var lastname = Utilities.ReadLine("Last Name: ");
+			var email = Utilities.ReadLine("Email: ");
+			var phone = Utilities.ReadLine("Phone: ");
+			var password = Utilities.ReadLine("Password: ");
+
+			var streetnumber = Utilities.ReadLine("Street Number: ");
+			var street = Utilities.ReadLine("Street: ");
+			var city = Utilities.ReadLine("City: ");
+			var state = Utilities.ReadLine("State: ");
+			var postcode = Utilities.ReadLine("Postcode: ");
+
+			var address = new Address()
+			{
+				Id = Utilities.AddressIdGenerator.CurrentId,
+				State = state,
+				StreetName = street,
+				StreetNumber = streetnumber,
+				Suburb = city,
+				Postcode = postcode
+			};
+
+			var doctor = new Doctor()
+			{
+				Id = Utilities.DoctorIdGenerator.CurrentId,
+				Firstname = firstname,
+				Lastname = lastname,
+				Email = email,
+				Phone = phone,
+				Password = password,
+				AddressId = address.Id
+			};
+
+			_addressRepository.Add(address);
+			_userRepository.Add(doctor);
+			_addressRepository.SaveChanges();
+			_userRepository.SaveChanges();
+
+			Console.WriteLine($"{firstname} {lastname} added to the system!");
+		}
+
+		void AddPatient()
+		{
+			Console.Clear();
+			Utilities.PrintMessageInBox("Add Patient");
+			Console.WriteLine("Registering a new patient with the DOTNET Hospital Management System");
+
+			var firstname = Utilities.ReadLine("First Name: ");
+			var lastname = Utilities.ReadLine("Last Name: ");
+			var email = Utilities.ReadLine("Email: ");
+			var phone = Utilities.ReadLine("Phone: ");
+			var password = Utilities.ReadLine("Password: ");
+
+			var streetnumber = Utilities.ReadLine("Street Number: ");
+			var street = Utilities.ReadLine("Street: ");
+			var city = Utilities.ReadLine("City: ");
+			var state = Utilities.ReadLine("State: ");
+			var postcode = Utilities.ReadLine("Postcode: ");
+
+			var address = new Address()
+			{
+				Id = Utilities.AddressIdGenerator.CurrentId,
+				State = state,
+				StreetName = street,
+				StreetNumber = streetnumber,
+				Suburb = city,
+				Postcode = postcode
+			};
+
+			var patient = new Patient()
+			{
+				Id = Utilities.PatientIdGenerator.CurrentId,
+				Firstname = firstname,
+				Lastname = lastname,
+				Email = email,
+				Phone = phone,
+				Password = password,
+				AddressId = address.Id
+			};
+
+			_addressRepository.Add(address);
+			_userRepository.Add(patient);
+			_addressRepository.SaveChanges();
+			_userRepository.SaveChanges();
+
+			Console.WriteLine($"{firstname} {lastname} added to the system!");
 		}
 	}
 }
