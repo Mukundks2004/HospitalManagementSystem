@@ -16,7 +16,5 @@
 
 		public static readonly string BoxHeader = "DOTNET Hospital Management System";
 		public static readonly int BoxPadding = 2;
-
-		public static readonly Dictionary<string, string> TempDetails = new() { { "admin", "123" } };
 	}
 }

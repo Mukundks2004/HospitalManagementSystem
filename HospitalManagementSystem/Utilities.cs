@@ -2,13 +2,15 @@
 {
 	public class Utilities
 	{
-		//Might make a whole class of these, use for doctor, patient, apppointment, etc.
-		int _currentId = 1000;
+		public static IdGenerator AdminIdGenerator { get; } = new(1000);
 
-		public int CurrentId
-		{
-			get => _currentId++;
-		}
+		public static IdGenerator DoctorIdGenerator { get; } = new(2000);
+
+		public static IdGenerator PatientIdGenerator { get; } = new(3000);
+
+		public static IdGenerator AppointmentIdGenerator { get; } = new(4000);
+
+		public static IdGenerator AddressIdGenerator { get; } = new(5000);
 
 		/// <summary>
 		/// Prints a message in a box at the top of the screen
