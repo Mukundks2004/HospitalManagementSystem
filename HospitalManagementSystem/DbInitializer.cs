@@ -10,13 +10,20 @@
 		}
 
 		/// <summary>
-		/// Deletes database and recreates it with same schema
+		/// Deletes database
 		/// </summary>
-		public void DatabaseRefresh()
+		public void DatabaseDelete()
 		{
 			dbContext.Database.EnsureDeleted();
+		}
+
+		/// <summary>
+		/// Creates database
+		/// </summary>
+		public void DatabaseCreate()
+		{
 			dbContext.Database.EnsureCreated();
 		}
-		
+
 	}
 }

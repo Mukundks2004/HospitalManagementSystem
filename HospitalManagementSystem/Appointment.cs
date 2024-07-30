@@ -21,7 +21,7 @@
 		/// <returns></returns>
 		public override string ToString()
 		{
-			return $"{Id,-6}{Constants.VerticalLine} {Doctor.GetFullName(),-19}{Constants.VerticalLine} {Patient.GetFullName(),-19}{Constants.VerticalLine} {Description}";
+			return $"{Id,-6}{Constants.VerticalLine} {Doctor!.GetFullName(),-19}{Constants.VerticalLine} {Patient!.GetFullName(),-19}{Constants.VerticalLine} {Description}";
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System.Net.Mail;
 using System.Net;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace HospitalManagementSystem
 {
@@ -33,24 +34,40 @@ namespace HospitalManagementSystem
 		/// </summary>
 		public void AddSeedData()
 		{
-			_dbInitializer.DatabaseRefresh();
+			//NOTE: Change if you do not want to clear the database between runs (you will have to use new Id gen system)
+			var remakeDb = true;
 
-			var sampleAddresses = SeedData.GetSampleAddresses();
-			var addressIds = sampleAddresses.Select(a => a.Id).ToArray();
-			_addressRepository.AddRange(sampleAddresses);
+			if (remakeDb)
+			{
+				_dbInitializer.DatabaseDelete();
+				_dbInitializer.DatabaseCreate();
 
-			var samplePatients = SeedData.GetSamplePatients(addressIds);
-			_userRepository.AddRange(samplePatients);
+				var sampleAddresses = SeedData.GetSampleAddresses();
+				var addressIds = sampleAddresses.Select(a => a.Id).ToArray();
+				_addressRepository.AddRange(sampleAddresses);
 
-			var sampleDoctors = SeedData.GetSampleDoctors(addressIds);
-			_userRepository.AddRange(sampleDoctors);
+				var samplePatients = SeedData.GetSamplePatients(addressIds);
+				_userRepository.AddRange(samplePatients);
 
-			_userRepository.AddRange(SeedData.GetSampleAdmin());
-			_appointmentRepository.AddRange(SeedData.GetSampleAppointments(samplePatients.Select(a => a.Id).ToArray(), sampleDoctors.Select(a => a.Id).ToArray()));
+				var sampleDoctors = SeedData.GetSampleDoctors(addressIds);
+				_userRepository.AddRange(sampleDoctors);
 
-			_userRepository.SaveChanges();
-			_addressRepository.SaveChanges();
-			_appointmentRepository.SaveChanges();
+				_userRepository.AddRange(SeedData.GetSampleAdmin());
+				_appointmentRepository.AddRange(SeedData.GetSampleAppointments(samplePatients.Select(a => a.Id).ToArray(), sampleDoctors.Select(a => a.Id).ToArray()));
+
+				_userRepository.SaveChanges();
+				_addressRepository.SaveChanges();
+				_appointmentRepository.SaveChanges();
+			}
+			else
+			{
+				_dbInitializer.DatabaseCreate();
+				Utilities.AddressIdGenerator = new IdGenerator(_addressRepository.GetAll().Any() ? (_addressRepository.GetAll().Max(u => u.Id) ?? 50000) : 50000);
+				Utilities.DoctorIdGenerator = new IdGenerator(_userRepository.GetAllDoctors().Any() ? (_userRepository.GetAllDoctors().Max(u => u.Id) ?? 20000) : 20000);
+				Utilities.PatientIdGenerator = new IdGenerator(_userRepository.GetAllPatients().Any() ? (_userRepository.GetAllPatients().Max(u => u.Id) ?? 30000) : 30000);
+				Utilities.AdminIdGenerator = new IdGenerator(_userRepository.GetAllAdmin().Any() ? (_userRepository.GetAllAdmin().Max(u => u.Id) ?? 10000) : 10000);
+				Utilities.AppointmentIdGenerator = new IdGenerator(_appointmentRepository.GetAll().Any() ? (_appointmentRepository.GetAll().Max(u => u.Id) ?? 40000) : 40000);
+			}
 		}
 
 		/// <summary>

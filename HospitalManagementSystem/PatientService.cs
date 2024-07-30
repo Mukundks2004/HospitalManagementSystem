@@ -135,7 +135,7 @@ namespace HospitalManagementSystem
 			Console.Clear();
 			Utilities.PrintMessageInBox("All Patients");
 			Console.WriteLine("\nAll patients registered to the DOTNET Hospital Management System\n");
-			UserExtensions.PrintDoctorDetailsHeader();
+			UserExtensions.PrintPatientDetailsHeader();
 			foreach (var doctor in _userRepository.GetAllPatients())
 			{
 				Console.WriteLine(doctor.GetString());

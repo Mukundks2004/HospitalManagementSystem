@@ -2,15 +2,15 @@
 {
 	public class Utilities
 	{
-		public static IdGenerator AdminIdGenerator { get; } = new(1000);
+		public static IdGenerator AdminIdGenerator { get; set; } = new(10000);
 
-		public static IdGenerator DoctorIdGenerator { get; } = new(2000);
+		public static IdGenerator DoctorIdGenerator { get; set; } = new(20000);
 
-		public static IdGenerator PatientIdGenerator { get; } = new(3000);
+		public static IdGenerator PatientIdGenerator { get; set; } = new(30000);
 
-		public static IdGenerator AppointmentIdGenerator { get; } = new(4000);
+		public static IdGenerator AppointmentIdGenerator { get; set; } = new(40000);
 
-		public static IdGenerator AddressIdGenerator { get; } = new(5000);
+		public static IdGenerator AddressIdGenerator { get; set; } = new(50000);
 
 		/// <summary>
 		/// Prints a message in a box at the top of the screen
@@ -61,13 +61,24 @@
 		}
 
 		/// <summary>
-		/// Reads input from the user and returns an empty string if the user ctrl-Zs
+		/// Prompts the user, then returns the response.
 		/// </summary>
 		/// <param name="prompt"></param>
 		/// <returns></returns>
-		public static string ReadLine(string prompt = "")
+		public static string ReadLine(string prompt)
 		{
 			Console.Write(prompt);
+			return ReadLine();
+		}
+
+		/// <summary>
+		/// Reads the input from the user and returns it.
+		/// Returns an empty string if the user ctrl-Zs
+		/// </summary>
+		/// <param name="prompt"></param>
+		/// <returns></returns>
+		public static string ReadLine()
+		{
 			return Console.ReadLine() ?? string.Empty;
 		}
 	}

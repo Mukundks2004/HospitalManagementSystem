@@ -32,7 +32,8 @@ namespace HospitalManagementSystem
 				}
 
 				Utilities.PrintMessageInBox("Doctor Details");
-				var doctorId = Utilities.ReadLine("\nPlease enter the ID of the doctor whose details you are checking.\n");
+				Console.WriteLine("\nPlease enter the ID of the doctor whose details you are checking.\n");
+				var doctorId = Utilities.ReadLine();
 				if (!int.TryParse(doctorId, out var doctorNumber))
 				{
 					_feedback = "Bad ID! Try again.";
