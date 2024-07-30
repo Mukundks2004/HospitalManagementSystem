@@ -61,9 +61,9 @@ namespace HospitalManagementSystem
 		/// <summary>
 		/// Saves any changes that have been made to the database including adding, removing and updating entries.
 		/// </summary>
-		public void SaveChanges()
+		public int SaveChanges()
 		{
-			dbContext.SaveChanges();
+			return dbContext.SaveChanges();
 		}
 	}
 }

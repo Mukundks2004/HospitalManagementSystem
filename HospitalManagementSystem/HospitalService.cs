@@ -297,7 +297,7 @@ Please choose an option:
 
 			try
 			{
-				SendMailConfirmingAppointment(patient.Email, chosenDoctor, patient);
+				SendMailConfirmingAppointment(patient.Email!, chosenDoctor, patient);
 				Console.WriteLine("Email sent successfully!");
 			}
 			catch (Exception)

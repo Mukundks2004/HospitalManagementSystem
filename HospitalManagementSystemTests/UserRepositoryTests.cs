@@ -33,14 +33,24 @@ namespace HospitalManagementSystemTests
 				Address = address,
 			};
 
-			_mockUserSet = MockDbHelpers.GetQueryableMockDbSet(new List<User> { doctor });
+			var patient = new Patient()
+			{
+				Id = 2,
+				Firstname = "Mr",
+				Lastname = "Pat",
+				Phone = "0400000001",
+				Email = "patient@gmail.com",
+				Address = address,
+			};
+
+			_mockUserSet = MockDbHelpers.GetQueryableMockDbSet(new List<User> { doctor, patient });
 			_mockContext = new Mock<HospitalManagementSystemContext>();
 			_mockContext.Setup(h => h.Users).Returns(_mockUserSet.Object);
 			_userRepository = new UserRepository(_mockContext.Object);
 		}
 
 		[Test]
-		public void TestAddUser()
+		public void TestGetDoctorById()
 		{
 			// Act
 			var doctor = _userRepository!.GetDoctorById(1);
@@ -61,6 +71,31 @@ namespace HospitalManagementSystemTests
 				Assert.That(doctor.Address.State, Is.EqualTo("NSW"));
 				Assert.That(doctor.Address.Suburb, Is.EqualTo("Liverpool"));
 				Assert.That(doctor.Address.Postcode, Is.EqualTo("2570"));
+			});
+		}
+
+		[Test]
+		public void TestGetPatientById()
+		{
+			// Act
+			var patient = _userRepository!.GetPatientById(2);
+
+			// Assert
+			Assert.Multiple(() =>
+			{
+				Assert.That(patient, Is.Not.Null);
+				Assert.That(patient!.Id, Is.EqualTo(1));
+				Assert.That(patient.Firstname, Is.EqualTo("Mr"));
+				Assert.That(patient.Lastname, Is.EqualTo("Pat"));
+				Assert.That(patient.Phone, Is.EqualTo("0400000001"));
+				Assert.That(patient.Email, Is.EqualTo("patient@gmail.com"));
+
+				Assert.That(patient.Address!.Id, Is.EqualTo(1));
+				Assert.That(patient.Address.StreetName, Is.EqualTo("Real Street"));
+				Assert.That(patient.Address.StreetNumber, Is.EqualTo("123"));
+				Assert.That(patient.Address.State, Is.EqualTo("NSW"));
+				Assert.That(patient.Address.Suburb, Is.EqualTo("Liverpool"));
+				Assert.That(patient.Address.Postcode, Is.EqualTo("2570"));
 			});
 		}
 	}

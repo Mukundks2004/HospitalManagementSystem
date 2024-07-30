@@ -150,7 +150,7 @@
 		public static string GetString(this Patient patient)
 		{
 			var doctorName = patient.Doctor is null ? string.Empty : $"{patient.Doctor.GetFullName()}";
-			return $"{patient.Id,-6}{Constants.VerticalLine} {patient.GetFullName(),-19}{Constants.VerticalLine} {doctorName,-19}{Constants.VerticalLine} {patient.Email,-19}{Constants.VerticalLine} {patient.Phone,-11}{Constants.VerticalLine} {patient.Address.GetString()}";
+			return $"{patient.Id,-6}{Constants.VerticalLine} {patient.GetFullName(),-19}{Constants.VerticalLine} {doctorName,-19}{Constants.VerticalLine} {patient.Email,-19}{Constants.VerticalLine} {patient.Phone,-11}{Constants.VerticalLine} {patient.Address!.GetString()}";
 		}
 
 		/// <summary>
@@ -160,7 +160,7 @@
 		/// <returns></returns>
 		public static string GetString(this Doctor doctor)
 		{
-			return $"{doctor.Id,-6}{Constants.VerticalLine} {doctor.GetFullName(),-19}{Constants.VerticalLine} {doctor.Email,-19}{Constants.VerticalLine} {doctor.Phone,-11}{Constants.VerticalLine} {doctor.Address.GetString()}";
+			return $"{doctor.Id,-6}{Constants.VerticalLine} {doctor.GetFullName(),-19}{Constants.VerticalLine} {doctor.Email,-19}{Constants.VerticalLine} {doctor.Phone,-11}{Constants.VerticalLine} {doctor.Address!.GetString()}";
 		}
 	}
 }

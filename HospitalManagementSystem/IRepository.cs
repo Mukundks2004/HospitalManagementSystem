@@ -14,6 +14,6 @@ namespace HospitalManagementSystem
 
 		IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
 
-		void SaveChanges();
+		int SaveChanges();
 	}
 }
