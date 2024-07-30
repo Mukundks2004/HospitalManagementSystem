@@ -21,7 +21,7 @@ namespace HospitalManagementSystem
 			_addressRepository = addressRepository;
 		}
 
-		void BookAppointment(Patient patient)
+		public void BookAppointment(Patient patient)
 		{
 			Console.Clear();
 			var chosenDoctor = patient.Doctor;
@@ -86,7 +86,7 @@ namespace HospitalManagementSystem
 			}
 		}
 
-		void CheckParticularPatient()
+		public void CheckParticularPatient()
 		{
 			while (true)
 			{
@@ -119,7 +119,7 @@ namespace HospitalManagementSystem
 			}
 		}
 
-		void ListAllPatients()
+		public void ListAllPatients()
 		{
 			Console.Clear();
 			Utilities.PrintMessageInBox("All Patients");
@@ -131,7 +131,7 @@ namespace HospitalManagementSystem
 			}
 		}
 
-		void AddPatient()
+		public void AddPatient()
 		{
 			Console.Clear();
 			Utilities.PrintMessageInBox("Add Patient");
@@ -178,7 +178,7 @@ namespace HospitalManagementSystem
 			Console.WriteLine($"{firstname} {lastname} added to the system!");
 		}
 
-		void SendMailConfirmingAppointment(string email, Doctor doctor, Patient patient)
+		public void SendMailConfirmingAppointment(string email, Doctor doctor, Patient patient)
 		{
 			var emailAddressAttribute = new EmailAddressAttribute();
 			if (!emailAddressAttribute.IsValid(email))

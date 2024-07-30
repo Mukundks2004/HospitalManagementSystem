@@ -15,7 +15,7 @@
 			_addressRepository = addressRepository;
 		}
 
-		void CheckParticularDoctor()
+		public void CheckParticularDoctor()
 		{
 			while (true)
 			{
@@ -48,7 +48,7 @@
 			}
 		}
 
-		void AppointmentsWith(Doctor doctor)
+		public void AppointmentsWith(Doctor doctor)
 		{
 			while (true)
 			{
@@ -86,7 +86,7 @@
 			}
 		}
 
-		void ListAllDoctors()
+		public void ListAllDoctors()
 		{
 			Console.Clear();
 			Utilities.PrintMessageInBox("All Doctors");
@@ -98,7 +98,7 @@
 			}
 		}
 
-		void AddDoctor()
+		public void AddDoctor()
 		{
 			Console.Clear();
 			Utilities.PrintMessageInBox("Add Doctor");
