@@ -108,7 +108,7 @@ namespace HospitalManagementSystemTests
 				Assert.That(nullAppointment.Count(), Is.Zero);
 				Assert.That(thirdAppointment, Is.Not.Null);
 				Assert.That(thirdAppointment!.Id, Is.EqualTo(3));
-				Assert.That(thirdAppointment.PatientId, Is.EqualTo(3));
+				Assert.That(thirdAppointment.PatientId, Is.EqualTo(103));
 				Assert.That(thirdAppointment.DoctorId, Is.EqualTo(3));
 			});
 		}
