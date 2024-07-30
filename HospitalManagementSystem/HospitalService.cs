@@ -155,6 +155,12 @@ Please choose an option:
 			return AppState.Menu;
 		}
 
+		/// <summary>
+		/// Displays the menu for the logged in patient, and allows the patient to complete an operation.
+		/// Returns the new application state following menu display.
+		/// </summary>
+		/// <param name="admin"></param>
+		/// <returns></returns>
 		AppState DisplayPatientMenu(Patient patient)
 		{
 			Utilities.PrintMessageInBox("Patient Menu");
@@ -199,6 +205,12 @@ Please choose an option:
 			return AppState.Menu;
 		}
 
+		/// <summary>
+		/// Displays the menu for the logged in doctor, and allows the doctor to complete an operation.
+		/// Returns the new application state following menu display.
+		/// </summary>
+		/// <param name="admin"></param>
+		/// <returns></returns>
 		AppState DisplayDoctorMenu(Doctor doctor)
 		{
 			Console.Clear();

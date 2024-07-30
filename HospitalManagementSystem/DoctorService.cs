@@ -1,4 +1,6 @@
-﻿namespace HospitalManagementSystem
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace HospitalManagementSystem
 {
 	public class DoctorService
 	{
@@ -15,6 +17,9 @@
 			_addressRepository = addressRepository;
 		}
 
+		/// <summary>
+		/// Prompts users until valid ID given and displays details of doctor matching ID
+		/// </summary>
 		public void CheckParticularDoctor()
 		{
 			while (true)
@@ -48,6 +53,11 @@
 			}
 		}
 
+		/// <summary>
+		/// Prompts user for patient ID.
+		/// Returns all appointments doctor has with particular patient
+		/// </summary>
+		/// <param name="doctor"></param>
 		public void AppointmentsWith(Doctor doctor)
 		{
 			while (true)
@@ -79,13 +89,16 @@
 				var appointments = _appointmentRepository.Find(a => a.DoctorId == doctor.Id && a.PatientId == patient.Id);
 				foreach (var appointment in appointments)
 				{
-					Console.WriteLine(appointment.GetString());
+					Console.WriteLine(appointment);
 				}
 
 				break;
 			}
 		}
 
+		/// <summary>
+		/// Lists all doctors in DB
+		/// </summary>
 		public void ListAllDoctors()
 		{
 			Console.Clear();
@@ -98,51 +111,71 @@
 			}
 		}
 
+		/// <summary>
+		/// Prompts user for details and adds doctor with details to DB
+		/// </summary>
 		public void AddDoctor()
 		{
-			Console.Clear();
-			Utilities.PrintMessageInBox("Add Doctor");
-			Console.WriteLine("Registering a new doctor with the DOTNET Hospital Management System");
-
-			var firstname = Utilities.ReadLine("First Name: ");
-			var lastname = Utilities.ReadLine("Last Name: ");
-			var email = Utilities.ReadLine("Email: ");
-			var phone = Utilities.ReadLine("Phone: ");
-			var password = Utilities.ReadLine("Password: ");
-
-			var streetnumber = Utilities.ReadLine("Street Number: ");
-			var street = Utilities.ReadLine("Street: ");
-			var city = Utilities.ReadLine("City: ");
-			var state = Utilities.ReadLine("State: ");
-			var postcode = Utilities.ReadLine("Postcode: ");
-
-			var address = new Address()
+			while (true)
 			{
-				Id = Utilities.AddressIdGenerator.CurrentId,
-				State = state,
-				StreetName = street,
-				StreetNumber = streetnumber,
-				Suburb = city,
-				Postcode = postcode
-			};
+				Console.Clear();
+				if (_feedback != string.Empty)
+				{
+					Console.WriteLine($"{_feedback}\n");
+					_feedback = string.Empty;
+				}
 
-			var doctor = new Doctor()
-			{
-				Id = Utilities.DoctorIdGenerator.CurrentId,
-				Firstname = firstname,
-				Lastname = lastname,
-				Email = email,
-				Phone = phone,
-				Password = password,
-				AddressId = address.Id
-			};
+				Utilities.PrintMessageInBox("Add Doctor");
+				Console.WriteLine("Registering a new doctor with the DOTNET Hospital Management System");
 
-			_addressRepository.Add(address);
-			_userRepository.Add(doctor);
-			_addressRepository.SaveChanges();
-			_userRepository.SaveChanges();
+				var firstname = Utilities.ReadLine("First Name: ");
+				var lastname = Utilities.ReadLine("Last Name: ");
+				var email = Utilities.ReadLine("Email: ");
+				var phone = Utilities.ReadLine("Phone: ");
+				var password = Utilities.ReadLine("Password: ");
 
-			Console.WriteLine($"{firstname} {lastname} added to the system!");
+				var streetnumber = Utilities.ReadLine("Street Number: ");
+				var street = Utilities.ReadLine("Street: ");
+				var city = Utilities.ReadLine("City: ");
+				var state = Utilities.ReadLine("State: ");
+				var postcode = Utilities.ReadLine("Postcode: ");
+
+				var emailValidator = new EmailAddressAttribute();
+				if (!emailValidator.IsValid(email))
+				{
+					_feedback = "Email is not valid, try again please";
+					continue;
+				}
+
+				var address = new Address()
+				{
+					Id = Utilities.AddressIdGenerator.CurrentId,
+					State = state,
+					StreetName = street,
+					StreetNumber = streetnumber,
+					Suburb = city,
+					Postcode = postcode
+				};
+
+				var doctor = new Doctor()
+				{
+					Id = Utilities.DoctorIdGenerator.CurrentId,
+					Firstname = firstname,
+					Lastname = lastname,
+					Email = email,
+					Phone = phone,
+					Password = password,
+					AddressId = address.Id
+				};
+
+				_addressRepository.Add(address);
+				_userRepository.Add(doctor);
+				_addressRepository.SaveChanges();
+				_userRepository.SaveChanges();
+
+				Console.WriteLine($"{firstname} {lastname} added to the system!");
+				break;
+			}
 		}
 	}
 }

@@ -9,6 +9,9 @@
 			dbContext = context;
 		}
 
+		/// <summary>
+		/// Deletes database and recreates it with same schema
+		/// </summary>
 		public void DatabaseRefresh()
 		{
 			dbContext.Database.EnsureDeleted();

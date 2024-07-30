@@ -49,16 +49,6 @@ namespace HospitalManagementSystem
 		}
 
 		/// <summary>
-		/// Returns the first Appointment that matches the provided ID, or null if none do
-		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		public Appointment? GetById(int id)
-		{
-			return dbContext.Set<Appointment>().Find(id);
-		}
-
-		/// <summary>
 		/// Saves any changes that have been made to the database including adding, removing and updating entries.
 		/// </summary>
 		public int SaveChanges()

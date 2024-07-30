@@ -72,7 +72,7 @@
 			AppointmentExtensions.PrintDetailsHeader();
 			foreach (var appointment in appointments)
 			{
-				Console.WriteLine(appointment.GetString());
+				Console.WriteLine(appointment);
 			}
 		}
 
@@ -105,7 +105,7 @@
 			AppointmentExtensions.PrintDetailsHeader();
 			foreach (var appointment in appointments)
 			{
-				Console.WriteLine(appointment.GetString());
+				Console.WriteLine(appointment);
 			}
 		}
 
@@ -136,31 +136,10 @@
 		{
 			return hospitalUser switch
 			{
-				Doctor doctor => doctor.GetString(),
-				Patient patient => patient.GetString(),
+				Doctor doctor => doctor.ToString(),
+				Patient patient => patient.ToString(),
 				_ => string.Empty
 			};
-		}
-
-		/// <summary>
-		/// Returns a string representation of a patient
-		/// </summary>
-		/// <param name="patient"></param>
-		/// <returns></returns>
-		public static string GetString(this Patient patient)
-		{
-			var doctorName = patient.Doctor is null ? string.Empty : $"{patient.Doctor.GetFullName()}";
-			return $"{patient.Id,-6}{Constants.VerticalLine} {patient.GetFullName(),-19}{Constants.VerticalLine} {doctorName,-19}{Constants.VerticalLine} {patient.Email,-19}{Constants.VerticalLine} {patient.Phone,-11}{Constants.VerticalLine} {patient.Address!.GetString()}";
-		}
-
-		/// <summary>
-		/// Returns a string representation of a doctor
-		/// </summary>
-		/// <param name="patient"></param>
-		/// <returns></returns>
-		public static string GetString(this Doctor doctor)
-		{
-			return $"{doctor.Id,-6}{Constants.VerticalLine} {doctor.GetFullName(),-19}{Constants.VerticalLine} {doctor.Email,-19}{Constants.VerticalLine} {doctor.Phone,-11}{Constants.VerticalLine} {doctor.Address!.GetString()}";
 		}
 	}
 }

@@ -52,6 +52,9 @@
 			}
         }
 
+		/// <summary>
+		/// Prompts the user for their details and changes app state and feedback if details are correct/incorrect.
+		/// </summary>
 		void Login()
 		{
 			Utilities.PrintMessageInBox("Login");
@@ -69,6 +72,14 @@
 			}
 		}
 
+		/// <summary>
+		/// Returns true if a user can be found in the DB with credentials matching those provided
+		/// Updates current user
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="password"></param>
+		/// <returns></returns>
+		/// <exception cref="HospitalManagementSystemException"></exception>
 		bool Authenticate(string id, string password)
 		{
 			try
@@ -80,12 +91,6 @@
 			{
 				throw new HospitalManagementSystemException("Authentication failed due to an internal error.");
 			}
-		}
-
-		void AddPatient()
-		{
-			Utilities.PrintMessageInBox("Add Patient");
-			Console.WriteLine("Registering a new patient with the DOTNET Hospital Management System");
 		}
 	}
 }

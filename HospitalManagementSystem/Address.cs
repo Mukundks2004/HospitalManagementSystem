@@ -18,5 +18,15 @@ namespace HospitalManagementSystem
 		public string? Postcode { get; set; }
 
 		public ICollection<HospitalUser>? HospitalUsers { get; set; }
+
+		/// <summary>
+		/// Returns string representation of an Address
+		/// </summary>
+		/// <param name="address"></param>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			return $"{StreetNumber} {StreetName} {Suburb} {State} {Postcode}";
+		}
 	}
 }

@@ -3,9 +3,9 @@ using Moq;
 
 namespace HospitalManagementSystemTests
 {
-	public static class MockDbHelpers
+	internal static class MockDbHelpers
 	{
-		public static Mock<DbSet<T>> GetQueryableMockDbSet<T>(List<T> sourceList) where T : class
+		public static DbSet<T> GetQueryableMockDbSet<T>(List<T> sourceList) where T : class
 		{
 			var queryable = sourceList.AsQueryable();
 
@@ -16,8 +16,8 @@ namespace HospitalManagementSystemTests
 			dbSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(() => queryable.GetEnumerator());
 
 			dbSet.Setup(d => d.Add(It.IsAny<T>())).Callback<T>((s) => sourceList.Add(s));
-
-			return dbSet;
+			dbSet.Setup(d => d.AddRange(It.IsAny<IEnumerable<T>>())).Callback<IEnumerable<T>>((s) => sourceList.AddRange(s));
+			return dbSet.Object;
 		}
 	}
 }

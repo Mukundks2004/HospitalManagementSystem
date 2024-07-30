@@ -7,9 +7,7 @@ namespace HospitalManagementSystem
 	public class PatientService
 	{
 		readonly UserRepository _userRepository;
-
 		readonly AppointmentRepository _appointmentRepository;
-
 		readonly AddressRepository _addressRepository;
 
 		string _feedback = string.Empty;
@@ -21,6 +19,13 @@ namespace HospitalManagementSystem
 			_addressRepository = addressRepository;
 		}
 
+		/// <summary>
+		/// Prompts the user for an appointment description.
+		/// Creates a new appointment with the patient and the doctor.
+		/// Sets a doctor if no doctor has been set.
+		/// Sends a confirmation email when done.
+		/// </summary>
+		/// <param name="patient"></param>
 		public void BookAppointment(Patient patient)
 		{
 			Console.Clear();
@@ -77,7 +82,7 @@ namespace HospitalManagementSystem
 
 			try
 			{
-				SendMailConfirmingAppointment(patient.Email!, chosenDoctor, patient);
+				SendMailConfirmingAppointment(patient.Email!, appointmentDescription, chosenDoctor, patient);
 				Console.WriteLine("Email sent successfully!");
 			}
 			catch (Exception)
@@ -86,6 +91,9 @@ namespace HospitalManagementSystem
 			}
 		}
 
+		/// <summary>
+		/// Prompts users until valid ID given and displays details of patient matching ID
+		/// </summary>
 		public void CheckParticularPatient()
 		{
 			while (true)
@@ -119,6 +127,9 @@ namespace HospitalManagementSystem
 			}
 		}
 
+		/// <summary>
+		/// Lists all patients in DB in table format
+		/// </summary>
 		public void ListAllPatients()
 		{
 			Console.Clear();
@@ -131,54 +142,81 @@ namespace HospitalManagementSystem
 			}
 		}
 
+		/// <summary>
+		/// Prompts the user for patient information and adds a new patient to the DB
+		/// </summary>
 		public void AddPatient()
 		{
-			Console.Clear();
-			Utilities.PrintMessageInBox("Add Patient");
-			Console.WriteLine("Registering a new patient with the DOTNET Hospital Management System");
-
-			var firstname = Utilities.ReadLine("First Name: ");
-			var lastname = Utilities.ReadLine("Last Name: ");
-			var email = Utilities.ReadLine("Email: ");
-			var phone = Utilities.ReadLine("Phone: ");
-			var password = Utilities.ReadLine("Password: ");
-
-			var streetnumber = Utilities.ReadLine("Street Number: ");
-			var street = Utilities.ReadLine("Street: ");
-			var city = Utilities.ReadLine("City: ");
-			var state = Utilities.ReadLine("State: ");
-			var postcode = Utilities.ReadLine("Postcode: ");
-
-			var address = new Address()
+			while (true)
 			{
-				Id = Utilities.AddressIdGenerator.CurrentId,
-				State = state,
-				StreetName = street,
-				StreetNumber = streetnumber,
-				Suburb = city,
-				Postcode = postcode
-			};
+				Console.Clear();
+				if (_feedback != string.Empty)
+				{
+					Console.WriteLine($"{_feedback}\n");
+					_feedback = string.Empty;
+				}
 
-			var patient = new Patient()
-			{
-				Id = Utilities.PatientIdGenerator.CurrentId,
-				Firstname = firstname,
-				Lastname = lastname,
-				Email = email,
-				Phone = phone,
-				Password = password,
-				AddressId = address.Id
-			};
+				Utilities.PrintMessageInBox("Add Patient");
+				Console.WriteLine("Registering a new patient with the DOTNET Hospital Management System");
 
-			_addressRepository.Add(address);
-			_userRepository.Add(patient);
-			_addressRepository.SaveChanges();
-			_userRepository.SaveChanges();
+				var firstname = Utilities.ReadLine("First Name: ");
+				var lastname = Utilities.ReadLine("Last Name: ");
+				var email = Utilities.ReadLine("Email: ");
+				var phone = Utilities.ReadLine("Phone: ");
+				var password = Utilities.ReadLine("Password: ");
 
-			Console.WriteLine($"{firstname} {lastname} added to the system!");
+				var streetnumber = Utilities.ReadLine("Street Number: ");
+				var street = Utilities.ReadLine("Street: ");
+				var city = Utilities.ReadLine("City: ");
+				var state = Utilities.ReadLine("State: ");
+				var postcode = Utilities.ReadLine("Postcode: ");
+
+				var emailValidator = new EmailAddressAttribute();
+				if (!emailValidator.IsValid(email))
+				{
+					_feedback = "email is not valid, please try again.";
+					continue;
+				}
+
+				var address = new Address()
+				{
+					Id = Utilities.AddressIdGenerator.CurrentId,
+					State = state,
+					StreetName = street,
+					StreetNumber = streetnumber,
+					Suburb = city,
+					Postcode = postcode
+				};
+
+				var patient = new Patient()
+				{
+					Id = Utilities.PatientIdGenerator.CurrentId,
+					Firstname = firstname,
+					Lastname = lastname,
+					Email = email,
+					Phone = phone,
+					Password = password,
+					AddressId = address.Id
+				};
+
+				_addressRepository.Add(address);
+				_userRepository.Add(patient);
+				_addressRepository.SaveChanges();
+				_userRepository.SaveChanges();
+
+				Console.WriteLine($"{firstname} {lastname} added to the system!");
+				break;
+			}
 		}
 
-		public void SendMailConfirmingAppointment(string email, Doctor doctor, Patient patient)
+		/// <summary>
+		/// Sends an email from the postman account to the provided email, including the appointment just created.
+		/// </summary>
+		/// <param name="email"></param>
+		/// <param name="doctor"></param>
+		/// <param name="patient"></param>
+		/// <exception cref="HospitalManagementSystemException"></exception>
+		public void SendMailConfirmingAppointment(string email, string description, Doctor doctor, Patient patient)
 		{
 			var emailAddressAttribute = new EmailAddressAttribute();
 			if (!emailAddressAttribute.IsValid(email))
@@ -199,7 +237,7 @@ namespace HospitalManagementSystem
 			{
 				From = new MailAddress(fromEmail),
 				Subject = "Appointment booked!",
-				Body = $"You, {patient.GetFullName()}, have just booked an appointment with doctor {doctor.GetFullName()}.",
+				Body = $"You, {patient.GetFullName()}, have just booked an appointment with doctor {doctor.GetFullName()}. The appointment is about \"{description}\".",
 			};
 
 			mailMessage.To.Add(email);
