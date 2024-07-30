@@ -51,25 +51,21 @@ namespace HospitalManagementSystem
 				.HasOne(u => u.Address)
 				.WithMany(a => a.HospitalUsers)
 				.HasForeignKey(u => u.AddressId);
-				//.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<Appointment>()
 				.HasOne(a => a.Doctor)
 				.WithMany(d => d.Appointments)
 				.HasForeignKey(a => a.DoctorId);
-				//.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<Appointment>()
 				.HasOne(a => a.Patient)
 				.WithMany(p => p.Appointments)
 				.HasForeignKey(a => a.PatientId);
-			//.OnDelete(DeleteBehavior.Cascade);
 
 			modelBuilder.Entity<Patient>()
 				.HasOne(u => u.Doctor)
 				.WithMany(a => a.Patients)
 				.HasForeignKey(u => u.DoctorId);
-				//.OnDelete(DeleteBehavior.Cascade);
 		}
 	}
 }

@@ -5,7 +5,7 @@
 		static readonly Random rnd = new();
 
 		/// <summary>
-		/// Returns some sample doctors
+		/// Returns 10 sample doctors
 		/// </summary>
 		/// <param name="addressIds"></param>
 		/// <returns></returns>

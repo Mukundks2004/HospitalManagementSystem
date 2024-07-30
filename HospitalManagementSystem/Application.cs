@@ -36,8 +36,7 @@
 				Console.Clear();
 				if (_feedback != string.Empty)
 				{
-					Console.WriteLine(_feedback);
-					Console.WriteLine();
+					Console.WriteLine($"{_feedback}\n");
 					_feedback = string.Empty;
 				}
 

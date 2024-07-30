@@ -17,12 +17,12 @@ namespace HospitalManagementSystem
 				.AddScoped<AddressRepository>()
 				.AddScoped<AppointmentRepository>()
 				.AddScoped<HospitalService>()
+				.AddScoped<Application>()
 				.BuildServiceProvider();
 
-			HospitalService? service = serviceProvider.GetService<HospitalService>();
-			_ = service ?? throw new ArgumentNullException(nameof(service));
+			Application? app = serviceProvider.GetService<Application>();
+			_ = app ?? throw new ArgumentNullException(nameof(app));
 
-			var app = new Application(service);
 			app.Run();
 		}
 	}

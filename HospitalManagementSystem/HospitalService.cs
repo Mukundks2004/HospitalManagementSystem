@@ -59,8 +59,7 @@
 			Console.Clear();
 			if (_feedback != string.Empty)
 			{
-				Console.WriteLine(_feedback);
-				Console.WriteLine();
+				Console.WriteLine($"{_feedback}\n");
 				_feedback = string.Empty;
 			}
 
@@ -81,6 +80,12 @@
 			return result;
 		}
 
+		/// <summary>
+		/// Displays the menu for the logged in admin, and allows the admin to complete an operation.
+		/// Returns the new application state following menu display.
+		/// </summary>
+		/// <param name="admin"></param>
+		/// <returns></returns>
 		AppState DisplayAdminMenu(Admin admin)
 		{
 			Utilities.PrintMessageInBox("Administrator Menu");
@@ -238,8 +243,7 @@ Please choose an option:
 					Console.Clear();
 					if (_feedback != string.Empty)
 					{
-						Console.WriteLine(_feedback);
-						Console.WriteLine();
+						Console.WriteLine($"{_feedback}\n");
 						_feedback = string.Empty;
 					}
 
@@ -293,8 +297,7 @@ Please choose an option:
 				Console.Clear();
 				if (_feedback != string.Empty)
 				{
-					Console.WriteLine(_feedback);
-					Console.WriteLine();
+					Console.WriteLine($"{_feedback}\n");
 					_feedback = string.Empty;
 				}
 
@@ -327,8 +330,7 @@ Please choose an option:
 				Console.Clear();
 				if (_feedback != string.Empty)
 				{
-					Console.WriteLine(_feedback);
-					Console.WriteLine();
+					Console.WriteLine($"{_feedback}\n");
 					_feedback = string.Empty;
 				}
 
@@ -361,8 +363,7 @@ Please choose an option:
 				Console.Clear();
 				if (_feedback != string.Empty)
 				{
-					Console.WriteLine(_feedback);
-					Console.WriteLine();
+					Console.WriteLine($"{_feedback}\n");
 					_feedback = string.Empty;
 				}
 
