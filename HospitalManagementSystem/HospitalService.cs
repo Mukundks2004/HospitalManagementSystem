@@ -1,18 +1,24 @@
-﻿namespace HospitalManagementSystem
+﻿using System.Net.Mail;
+using System.Net;
+using System.ComponentModel.DataAnnotations;
+
+namespace HospitalManagementSystem
 {
 	public class HospitalService
 	{
 		readonly UserRepository _userRepository;
 		readonly AppointmentRepository _appointmentRepository;
 		readonly AddressRepository _addressRepository;
+		readonly DbInitializer _dbInitializer;
 
 		string _feedback = string.Empty;
 
-		public HospitalService(UserRepository userRepository, AppointmentRepository appointmentRepository, AddressRepository addressRepository)
+		public HospitalService(UserRepository userRepository, AppointmentRepository appointmentRepository, AddressRepository addressRepository, DbInitializer dbInitializer)
 		{
 			_userRepository = userRepository;
 			_appointmentRepository = appointmentRepository;
 			_addressRepository = addressRepository;
+			_dbInitializer = dbInitializer;
 		}
 
 		/// <summary>
@@ -20,6 +26,8 @@
 		/// </summary>
 		public void AddSeedData()
 		{
+			_dbInitializer.DatabaseRefresh();
+
 			var sampleAddresses = SeedData.GetSampleAddresses();
 			var addressIds = sampleAddresses.Select(a => a.Id).ToArray();
 			_addressRepository.AddRange(sampleAddresses);
@@ -44,7 +52,7 @@
 		/// <returns></returns>
 		public IEnumerable<User> GetAllUsers()
 		{
-			var hospitalUsers = _userRepository.GetAllHospitalUsers().ToList<User>();
+			var hospitalUsers = _userRepository.GetAllHospitalUsersWithAddress().ToList<User>();
 			var admin = _userRepository.GetAllAdmin().ToList<User>();
 			return hospitalUsers.Concat(admin);
 		}
@@ -100,6 +108,7 @@ Please choose an option:
 6. Add patient
 7. Logout
 8. Exit");
+
 			var choice = Console.ReadKey().Key;
 			switch (choice)
 			{
@@ -282,12 +291,19 @@ Please choose an option:
 			Console.WriteLine($"You are booking a new appointment with {chosenDoctor.GetFullName()}");
 			var appointmentDescription = Utilities.ReadLine("Description of the appointment: ");
 			Console.WriteLine("The appointment has been booked successfully");
-
-			SendMail(patient.Email);
-
 			var newAppointment = new Appointment() { DoctorId = chosenDoctor.Id, PatientId = patient.Id, Description = appointmentDescription };
 			_appointmentRepository.Add(newAppointment);
 			_appointmentRepository.SaveChanges();
+
+			try
+			{
+				SendMailConfirmingAppointment(patient.Email, chosenDoctor, patient);
+				Console.WriteLine("Email sent successfully!");
+			}
+			catch (Exception)
+			{
+				Console.WriteLine("Email unfortunately did not send.");
+			}
 		}
 
 		void CheckParticularPatient()
@@ -512,9 +528,33 @@ Please choose an option:
 			Console.WriteLine($"{firstname} {lastname} added to the system!");
 		}
 
-		void SendMail(string email)
+		void SendMailConfirmingAppointment(string email, Doctor doctor, Patient patient)
 		{
-			throw new NotImplementedException();
+			var emailAddressAttribute = new EmailAddressAttribute();
+			if (!emailAddressAttribute.IsValid(email))
+			{
+				throw new HospitalManagementSystemException();
+			}
+
+			string fromEmail = "hospitalpostmanmukund@gmail.com";
+			string password = "fngd tmij ewmf rsgs";
+
+			SmtpClient client = new SmtpClient("smtp.gmail.com", 587)
+			{
+				Credentials = new NetworkCredential(fromEmail, password),
+				EnableSsl = true
+			};
+
+			MailMessage mailMessage = new MailMessage
+			{
+				From = new MailAddress(fromEmail),
+				Subject = "Appointment booked!",
+				Body = $"You, {patient.GetFullName()}, have just booked an appointment with doctor {doctor.GetFullName()}.",
+			};
+
+			mailMessage.To.Add(email);
+
+			client.Send(mailMessage);
 		}
 	}
 }

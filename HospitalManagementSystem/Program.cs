@@ -16,6 +16,7 @@ namespace HospitalManagementSystem
 				.AddScoped<UserRepository>()
 				.AddScoped<AddressRepository>()
 				.AddScoped<AppointmentRepository>()
+				.AddScoped<DbInitializer>()
 				.AddScoped<HospitalService>()
 				.AddScoped<Application>()
 				.BuildServiceProvider();

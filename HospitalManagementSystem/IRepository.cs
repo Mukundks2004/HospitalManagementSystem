@@ -14,10 +14,6 @@ namespace HospitalManagementSystem
 
 		IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
 
-		void Update(T entity);
-
-		void Remove(T entity);
-
 		void SaveChanges();
 	}
 }

@@ -129,10 +129,11 @@
 				{
 					Id = Utilities.PatientIdGenerator.CurrentId,
 					Password = "coconut",
-					Firstname = "Joe",
-					Lastname = "Biden",
+					Firstname = "sample_F",
+					Lastname = "sample_L",
 					AddressId = addressIds[rnd.Next(addressIds.Length)],
-					Email = "bigJ@gmail.com",
+					//Email = "mukundsrinivasan0@gmail.com",
+					Email = "muk@gmail.com",
 					Phone = "0400000010"
 				},
 				new Patient

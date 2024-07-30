@@ -4,11 +4,11 @@ namespace HospitalManagementSystem
 {
 	public class HospitalManagementSystemContext : DbContext
 	{
-		public DbSet<User> Users { get; set; }
+		public virtual DbSet<User> Users { get; set; }
 
-		public DbSet<Address> Addresses { get; set; }
+		public virtual DbSet<Address> Addresses { get; set; }
 
-		public DbSet<Appointment> Appointments { get; set; }
+		public virtual DbSet<Appointment> Appointments { get; set; }
 
 		public string DbPath { get; }
 
@@ -17,9 +17,6 @@ namespace HospitalManagementSystem
 			var folder = Environment.SpecialFolder.LocalApplicationData;
 			var path = Environment.GetFolderPath(folder);
 			DbPath = System.IO.Path.Join(path, "library.db");
-
-			Database.EnsureDeleted();
-			Database.EnsureCreated();
 		}
 
 		/// <summary>
